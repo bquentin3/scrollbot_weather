@@ -1,0 +1,36 @@
+# scrollbot_weather
+#Pimoroni Scroll PHAT HD &amp; PYOWM weather display
+import pyowm
+import scrollphathd as sphd
+import time
+
+sphd.rotate(180)
+while True:
+    sphd.clear()
+    owm = pyowm.OWM('Your OWM key here')
+    observation = owm.weather_at_place('City,two letter country code')
+    w = observation.get_weather()
+    s = w.get_status()
+    t = w.get_temperature('fahrenheit')['temp']
+    h = w.get_humidity()
+    c = w.get_clouds()
+    wind = w.get_wind('miles_hour')['speed']
+    wind = round(wind)
+    
+    print(s)
+    #print("Temp:" + (str(t) + "degrees F"))
+    #print("Humidity:" + (str(h) + "%"))
+    #print("Cloud coverage:" + (str(c) + "%"))
+    #print("Wind speed:" + (str(wind) + "mph"))
+    
+    message = ("<<<Houston, TX:_" + (str(s) + "_Temp: " + (str(t) + "deg.F_Humidity: " + (str(h) + "%_Cloud cover: " + (str(c) + "%_Wind speed: " + (str(wind) + "mph_>>>"))))))
+    length = len(message) * 17
+    sphd.set_brightness(0.4)
+    sphd.write_string(message)
+    for i in range(length):
+        sphd.show()
+        sphd.scroll(1)
+        time.sleep(0.05)
+        length -= 1
+    sphd.clear()
+    sphd.show()
